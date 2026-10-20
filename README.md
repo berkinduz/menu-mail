@@ -15,7 +15,15 @@
   <img src="docs/images/settings.png" width="31%" alt="Appearance and launch at login settings">
 </p>
 
-Read recent messages without switching apps. MenuMail connects to an account already in **Apple Mail** and remembers your mailbox. Free, open source, and built for macOS.
+MenuMail is a free, open-source **macOS menu bar email reader** that works with your existing **Apple Mail** mailbox. Read recent messages without switching apps. MenuMail remembers your mailbox for next time.
+
+### Work email when other apps need admin approval
+
+Corporate **Microsoft 365 (Office 365) and Exchange** accounts can restrict sign-ins to approved email clients. Other third-party apps may be blocked or show **[“Need admin approval”](https://learn.microsoft.com/en-us/troubleshoot/entra/entra-id/app-integration/troubleshoot-consent-issues)** when requesting access to your company email.
+
+When your organization already permits the account in **Apple Mail on Mac**, MenuMail offers **work email in the macOS menu bar** through local Mail automation—**no separate provider login or Microsoft Entra app registration**.
+
+**[Sign in to Apple Mail](https://support.apple.com/guide/mail/mail35803/mac) → Connect MenuMail → Read from the menu bar.** Apple Mail handles authentication and server sync; you allow MenuMail to access Mail when macOS asks.
 
 ### Install in a minute
 

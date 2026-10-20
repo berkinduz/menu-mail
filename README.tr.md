@@ -15,7 +15,15 @@
   <img src="docs/images/settings.png" width="31%" alt="Simge ve başlangıç ayarları">
 </p>
 
-Uygulamalar arasında geçmeden son maillerini oku. MenuMail, **Apple Mail’e zaten eklenmiş hesabını** kullanır ve seçtiğin posta kutusunu hatırlar. Ücretsiz ve açık kaynak.
+MenuMail, **Apple Mail’e zaten eklenmiş hesabını** kullanan, ücretsiz ve açık kaynak bir **macOS menü çubuğu mail okuyucusudur**. Uygulamalar arasında geçiş yapmadan son maillerini oku. MenuMail seçtiğin posta kutusunu hatırlar.
+
+### Diğer mail uygulamaları yönetici onayı istediğinde
+
+Kurumsal **Microsoft 365 (Office 365) ve Exchange** hesapları, yalnızca onaylı mail uygulamalarında oturum açılabilecek şekilde sınırlandırılabilir. Başka bir uygulamada şirket mailinle giriş yapman engellenebilir veya **[“Need admin approval” (Yönetici onayı gerekiyor)](https://learn.microsoft.com/en-us/troubleshoot/entra/entra-id/app-integration/troubleshoot-consent-issues)** mesajıyla karşılaşabilirsin.
+
+Kurumun hesabını **Mac’te Apple Mail üzerinden kullanmana zaten izin veriyorsa**, MenuMail aynı posta kutusunu macOS’un yerel Mail otomasyonu aracılığıyla okuyabilir. Böylece **iş maillerine macOS menü çubuğundan erişirsin**; MenuMail için **ayrıca sağlayıcıya giriş yapman veya Microsoft Entra uygulama kaydı oluşturman gerekmez**.
+
+**[Apple Mail’de oturum aç](https://support.apple.com/guide/mail/mail35803/mac) → MenuMail’i bağla → Maillerini menü çubuğundan oku.** Oturum açma ve sunucu eşitlemesini Apple Mail yönetir; macOS sorduğunda MenuMail’in Mail’e erişmesine izin verirsin.
 
 ### Bir dakikada kur
 
