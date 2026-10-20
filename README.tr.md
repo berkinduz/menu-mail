@@ -61,5 +61,3 @@ Swift 6+ ve macOS 14+ gerekir. `bash scripts/package.sh` universal DMG ve ZIP ü
 ---
 
 Geliştiren: [berkinduz](https://github.com/berkinduz) · [İletişim](mailto:mberkinduz@gmail.com) · [MIT Lisansı](LICENSE)
-
-[![Bir kahve ısmarla](docs/images/buy-me-a-coffee.svg)](https://buymeacoffee.com/berkinduz)
