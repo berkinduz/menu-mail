@@ -61,5 +61,3 @@ Requires Swift 6+ and macOS 14+. `bash scripts/package.sh` creates a universal D
 ---
 
 Made by [berkinduz](https://github.com/berkinduz) · [Contact](mailto:mberkinduz@gmail.com) · [MIT License](LICENSE)
-
-[![Buy me a coffee](docs/images/buy-me-a-coffee.svg)](https://buymeacoffee.com/berkinduz)
