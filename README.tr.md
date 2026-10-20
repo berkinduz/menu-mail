@@ -40,6 +40,7 @@ Bu sürüm **notarize edilmedi**. macOS, ilk açılışta **Sistem Ayarları →
 - Tam HTML ve düz metin okuma; tek tıkla listeye dönüş.
 - Varsayılan **son 20 mail**; istersen 10, 20 veya 50 seç.
 - Elle veya otomatik yenileme, açık/koyu tema ve kompakt liste.
+- Menü her açıldığında gelen kutusu yenilenir; Apple Mail kontrol edilirken mevcut liste kullanılabilir kalır.
 - Dört menü çubuğu simgesi ve isteğe bağlı **oturum açılışında çalıştırma**.
 - Varsayılan dil İngilizce. **Settings → App language → Türkçe** yoluyla değiştir.
 
@@ -61,3 +62,11 @@ Swift 6+ ve macOS 14+ gerekir. `bash scripts/package.sh` universal DMG ve ZIP ü
 ---
 
 Geliştiren: [berkinduz](https://github.com/berkinduz) · [İletişim](mailto:mberkinduz@gmail.com) · [MIT Lisansı](LICENSE)
+
+### Sonraki adımlar · Katkıya açık
+
+- [ ] **Gerçek Apple Mail entegrasyon kontrolleri:** farklı macOS sürümlerinde ilk kurulum izinleri, Mail açık/kapalı durumu, bağlantı hataları, HTML içerik ve geri/yenileme akışları. Sonuçları birim testlerinden ayrı raporlama.
+- [ ] **Daha hızlı gezinme:** global klavye kısayolu, ok tuşlarıyla gezinme, Enter/Escape kontrolleri ve yüklenen son maillerde arama.
+- [ ] **Sürüm bildirimleri:** yeni sürüm çıktığında indirme bağlantısıyla haber verme; ardından uygulama içinden güncellemeyi değerlendirme.
+
+Katkı vermek ister misin? Bir maddeyi konuşmak için [issue aç](https://github.com/berkinduz/menu-mail/issues), ardından [katkı rehberini](CONTRIBUTING.md) izle.

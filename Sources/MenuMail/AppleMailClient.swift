@@ -23,8 +23,15 @@ struct MailAccount: Decodable, Identifiable, Sendable {
     let name: String
 }
 
+protocol MailClient: Sendable {
+    func accounts() async throws -> [MailAccount]
+    func mailboxes(accountID: String) async throws -> [String]
+    func inbox(accountID: String, mailbox: String, limit: Int, checkForMail: Bool) async throws -> [MailMessage]
+    func body(message: MailMessage, accountID: String, mailbox: String) async throws -> MailMessage.Body
+}
+
 /// Uses Mail's documented scripting interface. Mail owns authentication and sync.
-struct AppleMailClient: Sendable {
+struct AppleMailClient: MailClient {
     private struct Status: Decodable {
         let errorNumber: Int?
         let stage: String?

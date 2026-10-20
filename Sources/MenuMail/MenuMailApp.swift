@@ -65,6 +65,7 @@ struct MailboxView: View {
         .frame(width: 460, height: 580)
         .environment(\.locale, settings.locale)
         .preferredColorScheme(settings.appearance.colorScheme)
+        .background(MenuWindowObserver { store.menuDidOpen() }.frame(width: 0, height: 0))
         .onAppear { store.start() }
         .onChange(of: settings.refreshInterval) { store.configureAutoRefresh() }
     }

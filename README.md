@@ -40,6 +40,7 @@ This release is **not notarized**. macOS may require your approval in **System S
 - Full HTML and plain text reading, with a quick return to your inbox.
 - **20 recent messages** by default; choose 10, 20 or 50.
 - Manual or automatic refresh, light/dark themes, and a compact list.
+- Refreshes the inbox whenever you open the menu, keeping the current list available while it checks Apple Mail.
 - Four menu bar icons and optional **Launch at login**.
 - English by default; switch to **Türkçe** in Settings.
 
@@ -61,3 +62,11 @@ Requires Swift 6+ and macOS 14+. `bash scripts/package.sh` creates a universal D
 ---
 
 Made by [berkinduz](https://github.com/berkinduz) · [Contact](mailto:mberkinduz@gmail.com) · [MIT License](LICENSE)
+
+### Next steps · Contributions welcome
+
+- [ ] **Real Apple Mail integration checks:** first-run permissions, Mail open/closed, connection failures, HTML messages, and back/refresh flows across macOS versions. Report these separately from unit tests.
+- [ ] **Faster navigation:** a global keyboard shortcut, arrow-key navigation, Enter/Escape controls, and search within the loaded recent messages.
+- [ ] **Update notifications:** show when a new release is available and link to its download; explore in-app updates afterward.
+
+Want to help? [Open an issue](https://github.com/berkinduz/menu-mail/issues) to discuss an item, then follow the [contributor guide](CONTRIBUTING.md).

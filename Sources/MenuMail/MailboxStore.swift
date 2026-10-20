@@ -76,19 +76,24 @@ final class MailboxStore {
     private(set) var selected: MailMessage?
     private(set) var isDemo = false
     private var listActivity: ListActivity?
+    private var isBackgroundRefresh = false
     private(set) var isLoadingBody = false
     private(set) var lastUpdated: Date?
     private(set) var error: Error?
 
     private var connection: Connection?
     private var mailboxCache: [String: [String]] = [:]
-    private let client = AppleMailClient()
+    private let client: any MailClient
     @ObservationIgnored private var bodyTask: Task<Void, Never>?
     @ObservationIgnored private var startupTask: Task<Void, Never>?
     @ObservationIgnored private var autoRefreshTask: Task<Void, Never>?
+    @ObservationIgnored private var menuRefreshTask: Task<Void, Never>?
     private var didStart = false
 
-    init(settings: AppSettings) { self.settings = settings }
+    init(settings: AppSettings, client: any MailClient = AppleMailClient()) {
+        self.settings = settings
+        self.client = client
+    }
 
     var isConnected: Bool { connection != nil }
     var isLoadingList: Bool { listActivity != nil }
@@ -128,6 +133,16 @@ final class MailboxStore {
             if accountID == savedID, mailboxName == savedMailbox, canConnect {
                 await connect()
             }
+        }
+    }
+
+    func menuDidOpen() {
+        start()
+        guard screen == .mailbox, selected == nil, connection != nil, !isDemo,
+              !isBusy, menuRefreshTask == nil else { return }
+        menuRefreshTask = Task {
+            defer { menuRefreshTask = nil }
+            await refreshInbox(inBackground: true)
         }
     }
 
@@ -224,7 +239,7 @@ final class MailboxStore {
             accountName: accounts.first(where: { $0.id == accountID })?.name ?? "Apple Mail", mailbox: mailboxName)
         do {
             let loaded = try await client.inbox(accountID: newConnection.accountID, mailbox: newConnection.mailbox,
-                                                limit: settings.messageLimit.rawValue)
+                                                limit: settings.messageLimit.rawValue, checkForMail: false)
             connection = newConnection
             isDemo = false
             messages = loaded
@@ -245,19 +260,25 @@ final class MailboxStore {
         }
     }
 
-    private func refreshInbox() async {
+    private func refreshInbox(inBackground: Bool = false) async {
         guard !isBusy else { return }
         if isDemo {
             lastUpdated = Date()
             return
         }
         guard let connection else { return }
+        isBackgroundRefresh = inBackground
         listActivity = .refreshing
         error = nil
-        defer { listActivity = nil }
+        defer {
+            listActivity = nil
+            isBackgroundRefresh = false
+        }
         do {
-            messages = try await client.inbox(accountID: connection.accountID, mailbox: connection.mailbox,
+            let loaded = try await client.inbox(accountID: connection.accountID, mailbox: connection.mailbox,
                 limit: settings.messageLimit.rawValue, checkForMail: true)
+            try Task.checkCancellation()
+            messages = loaded
             lastUpdated = Date()
         } catch is CancellationError {
         } catch { self.error = error }
@@ -282,7 +303,8 @@ final class MailboxStore {
     }
 
     func open(_ message: MailMessage) {
-        guard !isLoadingList else { return }
+        guard !isLoadingList || isBackgroundRefresh else { return }
+        if isBackgroundRefresh { menuRefreshTask?.cancel() }
         cancelBody()
         selected = message
         error = nil

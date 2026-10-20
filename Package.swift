@@ -9,6 +9,7 @@ let package = Package(
         .executable(name: "MenuMail", targets: ["MenuMail"])
     ],
     targets: [
-        .executableTarget(name: "MenuMail")
+        .executableTarget(name: "MenuMail"),
+        .testTarget(name: "MenuMailTests", dependencies: ["MenuMail"])
     ]
 )
