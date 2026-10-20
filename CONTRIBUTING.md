@@ -11,6 +11,8 @@ Keep the app small, preserve the read-only Mail behavior, and update both `en.lp
 
 For releases, `bash scripts/package.sh` builds both architectures and creates `build/MenuMail.dmg`, `build/MenuMail.zip` and checksums. Release signing and notarization are separate from the local build.
 
+Maintainers: update the version in `Resources/Info.plist`, add `docs/releases/vX.Y.Z.md`, and push the matching `vX.Y.Z` tag. The release workflow builds, verifies and publishes the DMG, ZIP and checksums to GitHub Releases.
+
 Contributions are provided under the project's [MIT License](LICENSE).
 
 ## Türkçe

@@ -52,6 +52,13 @@ struct MailMessage: Decodable, Identifiable, Sendable {
 final class MailboxStore {
     enum Screen { case mailbox, settings, account, about }
 
+    private enum ListActivity: String {
+        case accounts = "Loading accounts…"
+        case mailboxes = "Loading mailboxes…"
+        case messages = "Loading messages…"
+        case refreshing = "Refreshing messages…"
+    }
+
     private struct Connection {
         let accountID: String
         let accountName: String
@@ -68,7 +75,7 @@ final class MailboxStore {
     private(set) var messages: [MailMessage] = []
     private(set) var selected: MailMessage?
     private(set) var isDemo = false
-    private(set) var isLoadingList = false
+    private var listActivity: ListActivity?
     private(set) var isLoadingBody = false
     private(set) var lastUpdated: Date?
     private(set) var error: Error?
@@ -84,7 +91,12 @@ final class MailboxStore {
     init(settings: AppSettings) { self.settings = settings }
 
     var isConnected: Bool { connection != nil }
+    var isLoadingList: Bool { listActivity != nil }
     var isBusy: Bool { isLoadingList || isLoadingBody }
+    var loadingText: String? {
+        if let listActivity { return settings.text(listActivity.rawValue) }
+        return isLoadingBody ? settings.text("Opening message…") : nil
+    }
     var canConnect: Bool { !accountID.isEmpty && mailboxes.contains(mailboxName) }
     var canGoBack: Bool { screen != .mailbox || selected != nil }
     var accountName: String? { connection?.accountName }
@@ -141,9 +153,9 @@ final class MailboxStore {
 
     func loadAccounts() async {
         guard !isBusy else { return }
-        isLoadingList = true
+        listActivity = .accounts
         error = nil
-        defer { isLoadingList = false }
+        defer { listActivity = nil }
         do {
             let loaded = try await client.accounts()
             accounts = loaded
@@ -171,8 +183,8 @@ final class MailboxStore {
         mailboxName = ""
         error = nil
         guard !id.isEmpty else { return }
-        isLoadingList = true
-        defer { isLoadingList = false }
+        listActivity = .mailboxes
+        defer { listActivity = nil }
         do { try await updateMailboxes() }
         catch is CancellationError {
         } catch { self.error = error }
@@ -183,6 +195,7 @@ final class MailboxStore {
         if let cached = mailboxCache[accountID] {
             loaded = cached
         } else {
+            listActivity = .mailboxes
             loaded = try await client.mailboxes(accountID: accountID)
             mailboxCache[accountID] = loaded
         }
@@ -204,9 +217,9 @@ final class MailboxStore {
             error = nil
             return
         }
-        isLoadingList = true
+        listActivity = .messages
         error = nil
-        defer { isLoadingList = false }
+        defer { listActivity = nil }
         let newConnection = Connection(accountID: accountID,
             accountName: accounts.first(where: { $0.id == accountID })?.name ?? "Apple Mail", mailbox: mailboxName)
         do {
@@ -239,9 +252,9 @@ final class MailboxStore {
             return
         }
         guard let connection else { return }
-        isLoadingList = true
+        listActivity = .refreshing
         error = nil
-        defer { isLoadingList = false }
+        defer { listActivity = nil }
         do {
             messages = try await client.inbox(accountID: connection.accountID, mailbox: connection.mailbox,
                 limit: settings.messageLimit.rawValue, checkForMail: true)

@@ -10,9 +10,9 @@
 </p>
 
 <p align="center">
-  <img src="docs/images/inbox.jpg" width="31%" alt="MenuMail inbox with sample messages">
-  <img src="docs/images/reader.jpg" width="31%" alt="Full HTML message reader">
-  <img src="docs/images/settings.jpg" width="31%" alt="Appearance and launch at login settings">
+  <img src="docs/images/inbox.png" width="31%" alt="MenuMail inbox preview with example messages">
+  <img src="docs/images/reader.png" width="31%" alt="Full HTML message reader">
+  <img src="docs/images/settings.png" width="31%" alt="Appearance and launch at login settings">
 </p>
 
 Read recent messages without switching apps. MenuMail connects to an account already in **Apple Mail** and remembers your mailbox. Free, open source, and built for macOS.

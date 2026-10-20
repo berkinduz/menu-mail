@@ -10,9 +10,9 @@
 </p>
 
 <p align="center">
-  <img src="docs/images/inbox-tr.jpg" width="31%" alt="Örnek maillerle Türkçe gelen kutusu">
-  <img src="docs/images/reader.jpg" width="31%" alt="Tam HTML mail okuyucu">
-  <img src="docs/images/settings-tr.jpg" width="31%" alt="Simge ve başlangıç ayarları">
+  <img src="docs/images/inbox.png" width="31%" alt="Örnek maillerle MenuMail gelen kutusu önizlemesi">
+  <img src="docs/images/reader.png" width="31%" alt="Tam HTML mail okuyucu">
+  <img src="docs/images/settings.png" width="31%" alt="Simge ve başlangıç ayarları">
 </p>
 
 Uygulamalar arasında geçmeden son maillerini oku. MenuMail, **Apple Mail’e zaten eklenmiş hesabını** kullanır ve seçtiğin posta kutusunu hatırlar. Ücretsiz ve açık kaynak.

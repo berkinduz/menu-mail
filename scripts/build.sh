@@ -22,6 +22,7 @@ strip -S "$app_dir/Contents/MacOS/MenuMail"
 cp "$project_dir/Resources/Info.plist" "$app_dir/Contents/Info.plist"
 cp "$project_dir/Resources/MenuMail.icns" "$app_dir/Contents/Resources/MenuMail.icns"
 cp "$project_dir/Resources/MailBridge.js" "$app_dir/Contents/Resources/MailBridge.js"
+cp "$project_dir/Resources/MailInbox.applescript" "$app_dir/Contents/Resources/MailInbox.applescript"
 cp "$project_dir/Resources/MailSource.applescript" "$app_dir/Contents/Resources/MailSource.applescript"
 for language in en tr; do
     mkdir -p "$app_dir/Contents/Resources/$language.lproj"

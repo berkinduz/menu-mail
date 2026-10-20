@@ -107,7 +107,7 @@ struct MailboxView: View {
             }
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(headerTitle).font(.system(size: 15, weight: .semibold))
+                Text(headerTitle).font(.system(size: 15, weight: .semibold)).lineLimit(1)
                 Text(headerSubtitle)
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -116,8 +116,16 @@ struct MailboxView: View {
 
             Spacer()
 
-            if store.isLoadingList || (store.isLoadingBody && store.selected?.body != nil) {
-                ProgressView().controlSize(.small)
+            if let loadingText = store.loadingText, store.isLoadingList || store.selected?.body != nil {
+                HStack(spacing: 6) {
+                    Text(loadingText)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: true, vertical: false)
+                    ProgressView().controlSize(.small)
+                        .accessibilityLabel(loadingText)
+                }
+                .help(loadingText)
             }
 
             if store.screen == .mailbox && (store.isConnected || store.isDemo) {

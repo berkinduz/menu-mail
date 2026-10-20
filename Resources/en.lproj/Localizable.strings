@@ -48,6 +48,10 @@
 "Light" = "Light";
 "Load Apple Mail accounts" = "Load Apple Mail accounts";
 "Loading messages" = "Loading messages";
+"Loading accounts…" = "Loading accounts…";
+"Loading mailboxes…" = "Loading mailboxes…";
+"Loading messages…" = "Loading messages…";
+"Refreshing messages…" = "Refreshing messages…";
 "Made by %@" = "Made by %@";
 "Mailbox" = "Mailbox";
 "Make MenuMail your own." = "Make MenuMail your own.";
@@ -90,6 +94,7 @@
 "Your inbox, in the menu bar." = "Your inbox, in the menu bar.";
 "account" = "account";
 "mailbox" = "mailbox";
+"message list" = "message list";
 "message" = "message";
 "message source" = "message source";
 "source encoding" = "source encoding";

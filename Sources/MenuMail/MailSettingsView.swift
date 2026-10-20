@@ -76,6 +76,12 @@ struct MailSettingsView: View {
                     Button(settings.text("Open Login Items")) { settings.openLoginItems() }
                 }
             }
+
+            Section(settings.text("About MenuMail")) {
+                AboutContent(settings: settings)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+            }
         }
         .formStyle(.grouped)
         .scrollContentBackground(.hidden)

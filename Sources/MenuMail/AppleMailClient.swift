@@ -33,11 +33,31 @@ struct AppleMailClient: Sendable {
             switch stage {
             case "account": "account"
             case "mailbox": "mailbox"
+            case "inbox": "message list"
             case "message", "identity": "message"
             case "source": "message source"
             case "encoding": "source encoding"
             default: "Apple Mail request"
             }
+        }
+    }
+
+    private struct InboxEntry: Decodable, Sendable {
+        let id: String
+        let sourceIndex: Int
+        let subject: String
+        let sender: String
+        let receivedDateTime: String
+
+        var message: MailMessage {
+            let match = sender.wholeMatch(of: #/^(.*?)\s*<([^>]+)>\s*$/#)
+            let name = match.map {
+                String($0.1).replacingOccurrences(of: #"^\"|\"$"#, with: "", options: .regularExpression)
+            } ?? sender
+            let address = match.map { String($0.2) }
+            return MailMessage(id: id, subject: subject,
+                from: .init(emailAddress: .init(name: name, address: address)),
+                receivedDateTime: receivedDateTime, body: nil, sourceIndex: sourceIndex)
         }
     }
 
@@ -54,9 +74,9 @@ struct AppleMailClient: Sendable {
     }
 
     func inbox(accountID: String, mailbox: String, limit: Int, checkForMail: Bool = false) async throws -> [MailMessage] {
-        struct Response: Decodable, Sendable { let messages: [MailMessage] }
+        struct Response: Decodable, Sendable { let messages: [InboxEntry] }
         let response: Response = try await run(["inbox", accountID, mailbox, checkForMail ? "check" : "local", String(limit)])
-        return response.messages
+        return response.messages.map(\.message).sorted { ($0.receivedDateTime ?? "") > ($1.receivedDateTime ?? "") }
     }
 
     func body(message: MailMessage, accountID: String, mailbox: String) async throws -> MailMessage.Body {
@@ -73,15 +93,19 @@ struct AppleMailClient: Sendable {
     }
 
     private func run<Value: Decodable & Sendable>(_ arguments: [String]) async throws -> Value {
-        let readingSource = arguments.first == "source"
-        let resource = readingSource ? "MailSource" : "MailBridge"
-        let fileExtension = readingSource ? "applescript" : "js"
+        let nativeResource: String? = switch arguments.first {
+        case "source": "MailSource"
+        case "inbox": "MailInbox"
+        default: nil
+        }
+        let resource = nativeResource ?? "MailBridge"
+        let fileExtension = nativeResource != nil ? "applescript" : "js"
         guard let script = Bundle.main.url(forResource: resource, withExtension: fileExtension) else {
             throw MailError.message("The Mail connection script is missing. Build with scripts/build.sh and open the .app bundle.")
         }
         let execution = MailScriptExecution(script: script,
-            arguments: readingSource ? Array(arguments.dropFirst()) : arguments,
-            language: readingSource ? "AppleScript" : "JavaScript")
+            arguments: nativeResource != nil ? Array(arguments.dropFirst()) : arguments,
+            language: nativeResource != nil ? "AppleScript" : "JavaScript")
         let data = try await withTaskCancellationHandler {
             try await Task.detached(priority: .userInitiated) { try execution.read() }.value
         } onCancel: {

@@ -48,6 +48,10 @@
 "Light" = "Açık";
 "Load Apple Mail accounts" = "Apple Mail hesaplarını getir";
 "Loading messages" = "Mailler yükleniyor";
+"Loading accounts…" = "Hesaplar yükleniyor…";
+"Loading mailboxes…" = "Posta kutuları yükleniyor…";
+"Loading messages…" = "Mailler yükleniyor…";
+"Refreshing messages…" = "Mailler yenileniyor…";
 "Made by %@" = "Geliştiren: %@";
 "Mailbox" = "Posta kutusu";
 "Make MenuMail your own." = "MenuMail’i kendine göre ayarla.";
@@ -90,6 +94,7 @@
 "Your inbox, in the menu bar." = "Gelen kutun, menü çubuğunda.";
 "account" = "hesabı bulma";
 "mailbox" = "posta kutusunu bulma";
+"message list" = "mesaj listesini alma";
 "message" = "maili bulma";
 "message source" = "mailin tam içeriğini alma";
 "source encoding" = "mail içeriğini aktarma";

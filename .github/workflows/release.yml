@@ -1,0 +1,40 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Build universal app and installation packages
+        run: bash scripts/package.sh
+
+      - name: Verify release packages
+        run: |
+          version=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' build/MenuMail.app/Contents/Info.plist)
+          test "$GITHUB_REF_NAME" = "v$version"
+          lipo build/MenuMail.app/Contents/MacOS/MenuMail -verify_arch arm64 x86_64
+          codesign --verify --deep --strict build/MenuMail.app
+          hdiutil verify build/MenuMail.dmg
+          cd build
+          shasum -a 256 -c SHA256SUMS.txt
+
+      - name: Publish DMG, ZIP and checksums
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            build/MenuMail.dmg build/MenuMail.zip build/SHA256SUMS.txt \
+            --verify-tag --latest --title "MenuMail $GITHUB_REF_NAME" \
+            --notes-file "docs/releases/$GITHUB_REF_NAME.md"
