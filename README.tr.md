@@ -9,11 +9,7 @@
   <a href="https://github.com/berkinduz/menu-mail/issues">Geri bildirim</a>
 </p>
 
-<p align="center">
-  <img src="docs/images/inbox.png" width="31%" alt="Örnek maillerle MenuMail gelen kutusu önizlemesi">
-  <img src="docs/images/reader.png" width="31%" alt="Tam HTML mail okuyucu">
-  <img src="docs/images/settings.png" width="31%" alt="Simge ve başlangıç ayarları">
-</p>
+![Koyu macOS masaüstünde menü çubuğundan açılan MenuMail ve örnek mesajlar](docs/images/menu-preview.png)
 
 MenuMail, **Apple Mail’e zaten eklenmiş hesabını** kullanan, ücretsiz ve açık kaynak bir **macOS menü çubuğu mail okuyucusudur**. Uygulamalar arasında geçiş yapmadan son maillerini oku. MenuMail seçtiğin posta kutusunu hatırlar.
 
@@ -43,6 +39,8 @@ Bu sürüm **notarize edilmedi**. macOS, ilk açılışta **Sistem Ayarları →
 - Menü her açıldığında gelen kutusu yenilenir; Apple Mail kontrol edilirken mevcut liste kullanılabilir kalır.
 - Dört menü çubuğu simgesi ve isteğe bağlı **oturum açılışında çalıştırma**.
 - Varsayılan dil İngilizce. **Settings → App language → Türkçe** yoluyla değiştir.
+
+![MenuMail’in son mesajlar, görünüm ve başlangıç ayarları](docs/images/settings-preview.png)
 
 **Gizlilik:** Hesabın Apple Mail’de kalır. MenuMail’in sunucusu yoktur; şifre istemez, mail içeriğini kaydetmez veya loglamaz. Mail göndermez, silmez, taşımaz ve okundu durumunu değiştirmez. Maillerdeki uzak görseller kendi adreslerinden yüklenebilir. [Detaylar](docs/PRIVACY.md).
 

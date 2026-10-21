@@ -9,11 +9,7 @@
   <a href="https://github.com/berkinduz/menu-mail/issues">Feedback</a>
 </p>
 
-<p align="center">
-  <img src="docs/images/inbox.png" width="31%" alt="MenuMail inbox preview with example messages">
-  <img src="docs/images/reader.png" width="31%" alt="Full HTML message reader">
-  <img src="docs/images/settings.png" width="31%" alt="Appearance and launch at login settings">
-</p>
+![MenuMail opened from the menu bar on a dark macOS desktop, showing example messages](docs/images/menu-preview.png)
 
 MenuMail is a free, open-source **macOS menu bar email reader** that works with your existing **Apple Mail** mailbox. Read recent messages without switching apps. MenuMail remembers your mailbox for next time.
 
@@ -43,6 +39,8 @@ This release is **not notarized**. macOS may require your approval in **System S
 - Refreshes the inbox whenever you open the menu, keeping the current list available while it checks Apple Mail.
 - Four menu bar icons and optional **Launch at login**.
 - English by default; switch to **Türkçe** in Settings.
+
+![MenuMail settings for recent messages, appearance and launch at login](docs/images/settings-preview.png)
 
 **Privacy:** Your account stays in Apple Mail. MenuMail has no backend, does not ask for passwords, and does not save or log message contents. It does not send, delete, move or mark mail as read. Remote images in emails may load from their original URLs. [Details](docs/PRIVACY.md).
 
