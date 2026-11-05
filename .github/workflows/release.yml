@@ -16,18 +16,20 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Test and validate distribution scripts
+        run: |
+          swift test
+          bash -n scripts/build.sh scripts/package.sh scripts/validate-package.sh
+          python3 scripts/test-distribution.py
+
       - name: Build universal app and installation packages
         run: bash scripts/package.sh
 
       - name: Verify release packages
         run: |
-          version=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' build/MenuMail.app/Contents/Info.plist)
+          version=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' build/Envl.app/Contents/Info.plist)
           test "$GITHUB_REF_NAME" = "v$version"
-          lipo build/MenuMail.app/Contents/MacOS/MenuMail -verify_arch arm64 x86_64
-          codesign --verify --deep --strict build/MenuMail.app
-          hdiutil verify build/MenuMail.dmg
-          cd build
-          shasum -a 256 -c SHA256SUMS.txt
+          python3 scripts/homebrew.py --check
 
       - name: Publish DMG, ZIP and checksums
         env:
@@ -35,6 +37,6 @@ jobs:
           GH_REPO: ${{ github.repository }}
         run: |
           gh release create "$GITHUB_REF_NAME" \
-            build/MenuMail.dmg build/MenuMail.zip build/SHA256SUMS.txt \
-            --verify-tag --latest --title "MenuMail $GITHUB_REF_NAME" \
+            build/Envl.dmg build/Envl.zip build/SHA256SUMS.txt \
+            --verify-tag --latest --title "Envl $GITHUB_REF_NAME" \
             --notes-file "docs/releases/$GITHUB_REF_NAME.md"

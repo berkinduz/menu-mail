@@ -1,6 +1,6 @@
 import AppKit
 import Testing
-@testable import MenuMail
+@testable import Envl
 
 private actor TestMailClient: MailClient {
     private var pendingRefresh: CheckedContinuation<[MailMessage], Error>?
@@ -44,7 +44,7 @@ private actor TestMailClient: MailClient {
 struct MenuRefreshTests {
     @MainActor
     private struct Fixture {
-        let domain = "MenuMailTests.\(UUID().uuidString)"
+        let domain = "EnvlTests.\(UUID().uuidString)"
         let defaults: UserDefaults
         let client = TestMailClient()
         let store: MailboxStore

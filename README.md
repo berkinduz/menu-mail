@@ -1,70 +1,85 @@
 <p align="center">
-  <img src="docs/images/icon.png" width="88" alt="MenuMail icon">
+  <img src="docs/images/icon.png" width="88" alt="Envl Fold icon">
 </p>
-<h1 align="center">MenuMail</h1>
-<p align="center">Your inbox, one click away. Right in the Mac menu bar.</p>
+<h1 align="center">Envl</h1>
+<p align="center">A quick look at your inbox. Right in the Mac menu bar.</p>
 <p align="center">
-  <a href="https://github.com/berkinduz/menu-mail/releases/latest/download/MenuMail.dmg"><strong>Download for Mac</strong></a> ·
+  <a href="https://github.com/berkinduz/menu-mail/releases"><strong>Downloads</strong></a> ·
   <a href="README.tr.md">Türkçe</a> ·
   <a href="https://github.com/berkinduz/menu-mail/issues">Feedback</a>
 </p>
 
-![MenuMail opened from the menu bar on a dark macOS desktop, showing example messages](docs/images/menu-preview.png)
+Envl is a free, open-source **macOS menu bar email reader**. Take a quick look at the accounts already in Apple Mail, open a message or attachment, then get back to work. Previously named MenuMail.
 
-MenuMail is a free, open-source **macOS menu bar email reader** that works with your existing **Apple Mail** mailbox. Read recent messages without switching apps. MenuMail remembers your mailbox for next time.
+<p align="center">
+  <img src="docs/images/inbox.png" width="420" alt="Envl’s readable inbox and compact toolbar; example messages only">
+</p>
 
-### Work email when other apps need admin approval
+## Install
 
-Corporate **Microsoft 365 (Office 365) and Exchange** accounts can restrict sign-ins to approved email clients. Other third-party apps may be blocked or show **[“Need admin approval”](https://learn.microsoft.com/en-us/troubleshoot/entra/entra-id/app-integration/troubleshoot-consent-issues)** when requesting access to your company email.
+Requires **macOS 14 or later**. The universal app includes Apple silicon and Intel executables.
 
-When your organization already permits the account in **Apple Mail on Mac**, MenuMail offers **work email in the macOS menu bar** through local Mail automation—**no separate provider login or Microsoft Entra app registration**.
+```sh
+brew tap berkinduz/tap https://github.com/berkinduz/tap
+brew install --cask berkinduz/tap/envl
+```
 
-**[Sign in to Apple Mail](https://support.apple.com/guide/mail/mail35803/mac) → Connect MenuMail → Read from the menu bar.** Apple Mail handles authentication and server sync; you allow MenuMail to access Mail when macOS asks.
+Or download **Envl.dmg** from [Releases](https://github.com/berkinduz/menu-mail/releases), drag **Envl** to **Applications**, then open it. Using the downloaded app does not require Xcode.
 
-### Install in a minute
+The current package is **not notarized**. If macOS requests approval, follow [Apple’s opening instructions](https://support.apple.com/en-us/102445).
 
-1. [Download MenuMail.dmg](https://github.com/berkinduz/menu-mail/releases/latest/download/MenuMail.dmg) and drag **MenuMail** to **Applications**.
-2. Open it, click the menu bar envelope, and choose **Connect Apple Mail**.
-3. Allow Mail access when macOS asks. Choose an account or mailbox if prompted.
+## Connect Apple Mail
 
-**macOS 14+ · Apple silicon & Intel · No Xcode needed for the download.**
+1. Make sure your account is **added to Apple Mail and syncing** on this Mac. This includes Gmail, iCloud and corporate Exchange accounts supported by Mail. Your organization’s access policies still apply.
+2. Click the Fold envelope in the menu bar and choose **Load Apple Mail accounts**.
+3. Allow macOS **Automation access** to Mail when prompted, then choose your account and mailbox.
 
-This release is **not notarized**. macOS may require your approval in **System Settings → Privacy & Security**. [Apple's instructions](https://support.apple.com/en-us/102445).
+Apple Mail handles sign-in and synchronization. **Envl does not need its own Google or Microsoft application registration.** Apple Mail must keep running to sync messages, and its Dock icon remains visible.
 
-### Small app, useful details
+This release is **read only**. Envl does not send, archive, delete or change message read status. Opening a message never marks it read.
 
-- Full HTML and plain text reading, with a quick return to your inbox.
-- **20 recent messages** by default; choose 10, 20 or 50.
-- Manual or automatic refresh, light/dark themes, and a compact list.
-- Refreshes the inbox whenever you open the menu, keeping the current list available while it checks Apple Mail.
-- Four menu bar icons and optional **Launch at login**.
-- English by default; switch to **Türkçe** in Settings.
+| Connection | Status |
+| --- | --- |
+| **Apple Mail** | Available · read only |
+| **Independent Gmail sign-in** | Coming soon |
+| **Independent Outlook / Microsoft 365 sign-in** | Coming soon |
 
-![MenuMail settings for recent messages, appearance and launch at login](docs/images/settings-preview.png)
+Gmail and Outlook are informational rows in the account screen; they do not start sign-in in this release.
 
-**Privacy:** Your account stays in Apple Mail. MenuMail has no backend, does not ask for passwords, and does not save or log message contents. It does not send, delete, move or mark mail as read. Remote images in emails may load from their original URLs. [Details](docs/PRIVACY.md).
+## Made for a quick check
 
-### Build or contribute
+- **One quiet toolbar.** Search expands smoothly to the left of its icon. Account selection and All, Unread, Starred and Attachments filters share one popover.
+- **A readable inbox.** Larger text, aligned message rows, optional compact spacing and automatic loading as you scroll.
+- **A complete reader.** HTML and plain text, recipients, attachment open/save and a separate reader window. Remote images and content stay blocked until enabled. Search works on loaded messages.
+- **Your preferences.** Optional notifications with preview controls, per-account mutes and quiet hours; manual/automatic refresh; light/dark themes; unread count; Fold and four alternative menu bar icons.
+- **Native controls.** Optional launch at login, manual or launch-time update checks, and English/Türkçe UI. About lives at the bottom of Settings.
 
-Bug reports, translations and focused pull requests are welcome. [Contributor guide](CONTRIBUTING.md).
+Use **↑ / ↓** to browse, **Return** to open and **Escape** to go back. **⌥⌘M** toggles Envl; choose **⌃⌥M** or turn off the global shortcut in Settings.
+
+<details>
+  <summary>Settings preview</summary>
+  <p><img src="docs/images/settings.png" width="480" alt="Envl Settings with left-aligned labels, right-aligned controls and consistent separators"></p>
+</details>
+
+Screenshots show the current interface with synthetic example messages.
+
+## Privacy
+
+Envl has no backend, analytics or message logs. This release does not sign in to providers or access provider tokens. Account selections and preferences stay in local UserDefaults; messages and downloaded attachments stay in memory. Opening an attachment creates a temporary local file; saving writes to your chosen destination. Notifications are opt in. Update checks contact GitHub’s public releases API. [Data, permissions and file lifecycle](docs/PRIVACY.md).
+
+## Build and contribute
 
 ```sh
 git clone https://github.com/berkinduz/menu-mail.git
 cd menu-mail
 bash scripts/build.sh
-open build/MenuMail.app
+open build/Envl.app
 ```
 
-Requires Swift 6+ and macOS 14+. `bash scripts/package.sh` creates a universal DMG and ZIP. One mailbox at a time; account setup and server sync stay in Apple Mail.
+Building requires **Swift 6+** and macOS 14+. Run `swift test` for behavior checks, or `bash scripts/package.sh` to create universal **Envl.dmg**, **Envl.zip**, checksums and a pinned Homebrew cask. See [distribution setup](docs/DISTRIBUTION.md) for package checks and optional Developer ID signing/notarization.
+
+Bug reports, translations, accessibility fixes and focused pull requests are welcome. [Contributor guide](CONTRIBUTING.md).
 
 ---
 
 Made by [berkinduz](https://github.com/berkinduz) · [Contact](mailto:mberkinduz@gmail.com) · [MIT License](LICENSE)
-
-### Next steps · Contributions welcome
-
-- [ ] **Real Apple Mail integration checks:** first-run permissions, Mail open/closed, connection failures, HTML messages, and back/refresh flows across macOS versions. Report these separately from unit tests.
-- [ ] **Faster navigation:** a global keyboard shortcut, arrow-key navigation, Enter/Escape controls, and search within the loaded recent messages.
-- [ ] **Update notifications:** show when a new release is available and link to its download; explore in-app updates afterward.
-
-Want to help? [Open an issue](https://github.com/berkinduz/menu-mail/issues) to discuss an item, then follow the [contributor guide](CONTRIBUTING.md).

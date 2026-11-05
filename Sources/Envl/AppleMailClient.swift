@@ -18,20 +18,9 @@ enum MailError: LocalizedError, Sendable {
     }
 }
 
-struct MailAccount: Decodable, Identifiable, Sendable {
-    let id: String
-    let name: String
-}
-
-protocol MailClient: Sendable {
-    func accounts() async throws -> [MailAccount]
-    func mailboxes(accountID: String) async throws -> [String]
-    func inbox(accountID: String, mailbox: String, limit: Int, checkForMail: Bool) async throws -> [MailMessage]
-    func body(message: MailMessage, accountID: String, mailbox: String) async throws -> MailMessage.Body
-}
-
 /// Uses Mail's documented scripting interface. Mail owns authentication and sync.
 struct AppleMailClient: MailClient {
+    var capabilities: MailCapabilities { [.pagination, .attachments] }
     private struct Status: Decodable {
         let errorNumber: Int?
         let stage: String?
@@ -55,6 +44,8 @@ struct AppleMailClient: MailClient {
         let subject: String
         let sender: String
         let receivedDateTime: String
+        let isRead: Bool?
+        let isStarred: Bool?
 
         var message: MailMessage {
             let match = sender.wholeMatch(of: #/^(.*?)\s*<([^>]+)>\s*$/#)
@@ -64,7 +55,7 @@ struct AppleMailClient: MailClient {
             let address = match.map { String($0.2) }
             return MailMessage(id: id, subject: subject,
                 from: .init(emailAddress: .init(name: name, address: address)),
-                receivedDateTime: receivedDateTime, body: nil, sourceIndex: sourceIndex)
+                receivedDateTime: receivedDateTime, body: nil, sourceIndex: sourceIndex, isRead: isRead, isStarred: isStarred)
         }
     }
 
@@ -81,9 +72,34 @@ struct AppleMailClient: MailClient {
     }
 
     func inbox(accountID: String, mailbox: String, limit: Int, checkForMail: Bool = false) async throws -> [MailMessage] {
-        struct Response: Decodable, Sendable { let messages: [InboxEntry] }
-        let response: Response = try await run(["inbox", accountID, mailbox, checkForMail ? "check" : "local", String(limit)])
-        return response.messages.map(\.message).sorted { ($0.receivedDateTime ?? "") > ($1.receivedDateTime ?? "") }
+        try await page(accountID: accountID, mailbox: mailbox, limit: limit, query: nil, pageToken: nil, checkForMail: checkForMail).messages
+    }
+
+    private struct InboxResponse: Decodable, Sendable {
+        let messages: [InboxEntry]
+        let nextPageToken: String?
+        let unreadCount: Int?
+        var page: MailPage {
+            .init(messages: messages.map(\.message).sorted { ($0.receivedDateTime ?? "") > ($1.receivedDateTime ?? "") },
+                  nextPageToken: nextPageToken, unreadCount: unreadCount)
+        }
+    }
+
+    static func decodeInbox(_ data: Data) throws -> MailPage {
+        try JSONDecoder().decode(InboxResponse.self, from: data).page
+    }
+
+    func page(accountID: String, mailbox: String, limit: Int, query: String?, pageToken: String?) async throws -> MailPage {
+        try await page(accountID: accountID, mailbox: mailbox, limit: limit, query: query, pageToken: pageToken, checkForMail: false)
+    }
+
+    func page(accountID: String, mailbox: String, limit: Int, query: String?, pageToken: String?, checkForMail: Bool) async throws -> MailPage {
+        let offset = Int(pageToken ?? "0") ?? -1
+        guard offset >= 0 else { throw MailError.message("The message reference has expired. Return to the inbox and refresh.") }
+        let response: InboxResponse = try await run(["inbox", accountID, mailbox, checkForMail ? "check" : "local", String(limit), String(offset)])
+        var page = response.page
+        if let query, !query.isEmpty { page = .init(messages: page.messages.filter { $0.matches(search: query) }, unreadCount: page.unreadCount) }
+        return page
     }
 
     func body(message: MailMessage, accountID: String, mailbox: String) async throws -> MailMessage.Body {
@@ -123,7 +139,7 @@ struct AppleMailClient: MailClient {
         if let number = status.errorNumber {
             switch number {
             case -1743:
-                throw MailError.message("Apple Mail access was denied. Enable Mail for MenuMail in System Settings → Privacy & Security → Automation.")
+                throw MailError.message("Apple Mail access was denied. Enable Mail for Envl in System Settings → Privacy & Security → Automation.")
             case -1728:
                 throw MailError.message("The account, mailbox or message was not found. Choose the mailbox again, or return to the inbox and refresh.")
             case -1712:

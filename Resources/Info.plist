@@ -10,19 +10,21 @@
         <string>tr</string>
     </array>
     <key>CFBundleExecutable</key>
-    <string>MenuMail</string>
+    <string>Envl</string>
     <key>CFBundleIdentifier</key>
     <string>app.menumail.desktop</string>
     <key>CFBundleName</key>
-    <string>MenuMail</string>
+    <string>Envl</string>
+    <key>CFBundleDisplayName</key>
+    <string>Envl</string>
     <key>CFBundleIconFile</key>
-    <string>MenuMail</string>
+    <string>Envl</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>0.1.0</string>
+    <string>0.2.0</string>
     <key>CFBundleVersion</key>
-    <string>1</string>
+    <string>2</string>
     <key>LSMinimumSystemVersion</key>
     <string>14.0</string>
     <key>LSUIElement</key>
@@ -30,6 +32,6 @@
     <key>NSHighResolutionCapable</key>
     <true/>
     <key>NSAppleEventsUsageDescription</key>
-    <string>MenuMail accesses Apple Mail to display recent messages and their full contents from your chosen mailbox. It does not send, delete or change the read status of messages.</string>
+    <string>Envl accesses Apple Mail to display recent messages and their full contents from your chosen mailbox. It does not send, delete or change the read status of messages.</string>
 </dict>
 </plist>

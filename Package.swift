@@ -3,13 +3,13 @@
 import PackageDescription
 
 let package = Package(
-    name: "MenuMail",
+    name: "Envl",
     platforms: [.macOS(.v14)],
     products: [
-        .executable(name: "MenuMail", targets: ["MenuMail"])
+        .executable(name: "Envl", targets: ["Envl"])
     ],
     targets: [
-        .executableTarget(name: "MenuMail"),
-        .testTarget(name: "MenuMailTests", dependencies: ["MenuMail"])
+        .executableTarget(name: "Envl"),
+        .testTarget(name: "EnvlTests", dependencies: ["Envl"])
     ]
 )

@@ -38,6 +38,7 @@ enum MessageLimit: Int, CaseIterable, Identifiable {
 }
 
 enum MenuBarIcon: String, CaseIterable, Identifiable {
+    case fold = "MenuMailTemplate"
     case envelope = "envelope"
     case filledEnvelope = "envelope.fill"
     case inbox = "tray"
@@ -46,6 +47,7 @@ enum MenuBarIcon: String, CaseIterable, Identifiable {
     var id: String { rawValue }
     var title: String {
         switch self {
+        case .fold: "Fold"
         case .envelope: "Envelope"
         case .filledEnvelope: "Filled envelope"
         case .inbox: "Inbox"
@@ -79,6 +81,16 @@ final class AppSettings {
     var refreshInterval: RefreshInterval { didSet { defaults.set(refreshInterval.rawValue, forKey: "RefreshInterval") } }
     var compactList: Bool { didSet { defaults.set(compactList, forKey: "CompactList") } }
     var menuBarIcon: MenuBarIcon { didSet { defaults.set(menuBarIcon.rawValue, forKey: "MenuBarIcon") } }
+    var showUnreadCount: Bool { didSet { defaults.set(showUnreadCount, forKey: "ShowUnreadCount") } }
+    var allowRemoteContent: Bool { didSet { defaults.set(allowRemoteContent, forKey: "AllowRemoteContent") } }
+    var notificationsEnabled: Bool { didSet { defaults.set(notificationsEnabled, forKey: "NotificationsEnabled") } }
+    var notificationPreview: Bool { didSet { defaults.set(notificationPreview, forKey: "NotificationPreview") } }
+    var quietHoursEnabled: Bool { didSet { defaults.set(quietHoursEnabled, forKey: "QuietHoursEnabled") } }
+    var quietHoursStart: Int { didSet { defaults.set(quietHoursStart, forKey: "QuietHoursStart") } }
+    var quietHoursEnd: Int { didSet { defaults.set(quietHoursEnd, forKey: "QuietHoursEnd") } }
+    var mutedAccountIDs: Set<String> { didSet { defaults.set(Array(mutedAccountIDs), forKey: "MutedAccountIDs") } }
+    var shortcutPreset: GlobalShortcutPreset { didSet { defaults.set(shortcutPreset.rawValue, forKey: "GlobalShortcutPreset") } }
+    var checkForUpdatesAutomatically: Bool { didSet { defaults.set(checkForUpdatesAutomatically, forKey: "CheckForUpdatesAutomatically") } }
     private(set) var launchAtLogin = false
     private(set) var loginRequiresApproval = false
     private(set) var loginUpdateFailed = false
@@ -90,7 +102,17 @@ final class AppSettings {
         messageLimit = MessageLimit(rawValue: defaults.integer(forKey: "MessageLimit")) ?? .twenty
         refreshInterval = RefreshInterval(rawValue: defaults.integer(forKey: "RefreshInterval")) ?? .manual
         compactList = defaults.bool(forKey: "CompactList")
-        menuBarIcon = MenuBarIcon(rawValue: defaults.string(forKey: "MenuBarIcon") ?? "") ?? .envelope
+        menuBarIcon = MenuBarIcon(rawValue: defaults.string(forKey: "MenuBarIcon") ?? "") ?? .fold
+        showUnreadCount = defaults.object(forKey: "ShowUnreadCount") as? Bool ?? true
+        allowRemoteContent = defaults.bool(forKey: "AllowRemoteContent")
+        notificationsEnabled = defaults.bool(forKey: "NotificationsEnabled")
+        notificationPreview = defaults.object(forKey: "NotificationPreview") as? Bool ?? true
+        quietHoursEnabled = defaults.bool(forKey: "QuietHoursEnabled")
+        quietHoursStart = defaults.object(forKey: "QuietHoursStart") as? Int ?? 22
+        quietHoursEnd = defaults.object(forKey: "QuietHoursEnd") as? Int ?? 8
+        mutedAccountIDs = Set(defaults.stringArray(forKey: "MutedAccountIDs") ?? [])
+        shortcutPreset = GlobalShortcutPreset(rawValue: defaults.string(forKey: "GlobalShortcutPreset") ?? "") ?? .optionCommandM
+        checkForUpdatesAutomatically = defaults.bool(forKey: "CheckForUpdatesAutomatically")
         refreshLoginItemStatus()
     }
 
@@ -98,6 +120,13 @@ final class AppSettings {
 
     func text(_ key: String, _ arguments: CVarArg...) -> String {
         L10n.text(key, language: language, arguments: arguments)
+    }
+
+    func message(for error: Error) -> String {
+        if let error = error as? MailError { return error.message(language: language) }
+        if let error = error as? DirectMailError { return error.message(language: language) }
+        if error is DecodingError { return text("Could not read the mail response. Please try again.") }
+        return text(error.localizedDescription)
     }
 
     func refreshLoginItemStatus() {
